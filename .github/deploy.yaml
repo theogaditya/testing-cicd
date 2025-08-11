@@ -1,64 +1,64 @@
-# name: deploy
+name: deploy
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs: 
-#   build:
-#     name: Build, push to registries, and deploy to Cloud Run
-#     runs-on: ubuntu-latest
+jobs: 
+  build:
+    name: Build, push to registries, and deploy to Cloud Run
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-#       # Login to Docker Hub
-#       - name: Login to Docker Hub
-#         uses: docker/login-action@v2
-#         with:
-#           username: ${{ secrets.DOCKERHUB_USERNAME }}
-#           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#       # Auth to GCP
-#       - name: Authenticate to GCP
-#         uses: google-github-actions/auth@v2
-#         with:
-#           credentials_json: ${{ secrets.GCP_SA_KEY }}
+      # Auth to GCP
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-#       # Configure Docker for G-AR
-#       - name: Configure Docker for GAR
-#         run: gcloud auth configure-docker asia-docker.pkg.dev 
+      # Configure Docker for G-AR
+      - name: Configure Docker for GAR
+        run: gcloud auth configure-docker asia-docker.pkg.dev 
 
-#       # Set up Docker Buildx
-#       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v2
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-#       # Build & push to Docker Hub and G-AR
-#       - name: Build and push to Docker Hub & GAR
-#         uses: docker/build-push-action@v4
-#         with:
-#           context: .
-#           file: ./Dockerfile
-#           push: true
-#           tags: |
-#             ogadityahota/testing-ci-cd:latest
-#             asia-docker.pkg.dev/orbital-builder-454706-h5/testing-ci-cd/testing-ci-cd:latest
+      # Build & push to Docker Hub and G-AR
+      - name: Build and push to Docker Hub & GAR
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ogadityahota/testing-ci-cd:latest
+            asia-docker.pkg.dev/orbital-builder-454706-h5/testing-ci-cd/testing-ci-cd:latest
 
-#       # Deploy to Cloud Run
-#       - name: Deploy to Cloud Run
-#         run: |
-#           SERVICE_NAME="testing-ci-cd"
-#           IMAGE="asia-docker.pkg.dev/orbital-builder-454706-h5/testing-ci-cd/testing-ci-cd:latest"
-#           REGION="asia-south1" 
+      # Deploy to Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          SERVICE_NAME="testing-ci-cd"
+          IMAGE="asia-docker.pkg.dev/orbital-builder-454706-h5/testing-ci-cd/testing-ci-cd:latest"
+          REGION="asia-south1" 
 
-#           gcloud run deploy $SERVICE_NAME \
-#             --image $IMAGE \
-#             --region $REGION \
-#             --platform managed \
-#             --allow-unauthenticated \
-#             --min-instances 1 \
-#             --max-instances 3 \
-#             --ingress all \
-#             --port 3000
+          gcloud run deploy $SERVICE_NAME \
+            --image $IMAGE \
+            --region $REGION \
+            --platform managed \
+            --allow-unauthenticated \
+            --min-instances 1 \
+            --max-instances 3 \
+            --ingress all \
+            --port 3000
