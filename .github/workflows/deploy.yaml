@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-jobs: 
+jobs:     
   build:
     name: Build, push to registries, and deploy to Cloud Run
     runs-on: ubuntu-latest
@@ -61,4 +61,7 @@ jobs:
             --min-instances 1 \
             --max-instances 3 \
             --ingress all \
-            --port 3000
+            --port 3000 \
+            --set-env-vars \ 
+              DATABASE_URL=${{secrets.DATABASE_URL }}, \
+              cors=${{secrets.CORS }}
