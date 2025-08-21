@@ -62,4 +62,4 @@ jobs:
             --max-instances 3 \
             --ingress all \
             --port 3000 \
-            --set-env-vars DATABASE_URL=${{secrets.DATABASE_URL }},cors=${{secrets.CORS }}
+            --set-env-vars DATABASE_URL=${{secrets.DATABASE_URL }},cors=${{secrets.cors }}
